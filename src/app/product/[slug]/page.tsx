@@ -42,6 +42,34 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
         </div>
       </div>
       <section className="mt-12">
+        <h2 className="font-serif text-2xl text-pine-900">Product Description</h2>
+        {p.description.map((para, i) => (
+          <p key={i} className="mt-3 text-stone-700 leading-relaxed">{para}</p>
+        ))}
+        <div className="mt-8 grid gap-4 sm:grid-cols-2">
+          <div className="rounded-2xl border bg-white p-5">
+            <h3 className="font-serif text-xl text-pine-900">Suitable For</h3>
+            <ul className="mt-3 space-y-2 text-sm text-stone-700">
+              {p.suitableFor.map((s) => (
+                <li key={s} className="flex gap-2"><span className="text-pine-700 font-bold">✓</span>{s}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="rounded-2xl border-2 border-pine-800 bg-cream p-5">
+            <h3 className="font-serif text-xl text-pine-900">✨ Package Includes</h3>
+            <ul className="mt-3 space-y-2 text-sm text-stone-700">
+              {p.includes.map((s) => (
+                <li key={s} className="flex gap-2"><span className="text-pine-700 font-bold">✓</span>{s}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <div className="mt-8">
+          <h3 className="font-serif text-xl text-pine-900">Why Choose Balloon Zone Dubai?</h3>
+          <p className="mt-2 text-stone-700 leading-relaxed">Balloon Zone Dubai is the trusted name in balloons and decoration across the city. Every order is prepared with premium-quality balloons, delivered fully inflated and on time — same-day in Dubai for orders placed before 6 PM. Our professional setup team installs larger displays at your home, hotel or venue, and every order is backed by our delivery guarantee, so your celebration looks perfect from the first photo to the last guest.</p>
+        </div>
+      </section>
+      <section className="mt-12">
         <h2 className="font-serif text-2xl text-pine-900">Delivery &amp; balloon care</h2>
         <div className="mt-3 grid sm:grid-cols-2 gap-4 text-sm">
           <div className="rounded-2xl border bg-white p-4"><p className="font-semibold">Delivery information</p><p className="text-stone-600 mt-1">Same-day delivery in Dubai for orders before 6 PM. Delivery slots 9 AM–12 PM, 12–3 PM, 3–6 PM and 6–9 PM. Flat Dubai delivery AED 29 in this demo — confirm at launch.</p></div>

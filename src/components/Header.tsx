@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCart } from "@/lib/cart";
 import { MENU_GROUPS } from "@/lib/menu";
 import CallbackButton from "@/components/CallbackButton";
@@ -27,6 +27,26 @@ export default function Header() {
   const [promoEmail, setPromoEmail] = useState("");
   const [promoClaimed, setPromoClaimed] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
+  const navAreaRef = useRef<HTMLDivElement>(null);
+
+  // Dropdown closes on Escape, on page scroll, and on a click outside the
+  // nav area (mouse-leave of the header area is handled on the wrapper).
+  useEffect(() => {
+    if (!activeGroup) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setActiveGroup(null); };
+    const onScroll = () => setActiveGroup(null);
+    const onDown = (e: MouseEvent) => {
+      if (navAreaRef.current && !navAreaRef.current.contains(e.target as Node)) setActiveGroup(null);
+    };
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("mousedown", onDown);
+    window.addEventListener("scroll", onScroll, true);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("mousedown", onDown);
+      window.removeEventListener("scroll", onScroll, true);
+    };
+  }, [activeGroup]);
 
   const submitSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -151,7 +171,7 @@ export default function Header() {
           The dropdown is a full-width panel BELOW this row (a sibling
           of the scrolling container), so it is never clipped by
           overflow-x. */}
-      <div className="hidden lg:block border-t border-pine-100 bg-cream/70" onMouseLeave={() => setActiveGroup(null)}>
+      <div ref={navAreaRef} className="hidden lg:block border-t border-pine-100 bg-cream/70 relative" onMouseLeave={() => setActiveGroup(null)}>
         <div className="relative mx-auto max-w-7xl">
           <button
             type="button"
@@ -162,7 +182,6 @@ export default function Header() {
             ‹
           </button>
           <div ref={navRef} className="no-scrollbar flex flex-nowrap items-center gap-1 overflow-x-auto px-9 text-sm font-medium text-pine-800" role="navigation" aria-label="Main navigation">
-            <Link href="/" className="shrink-0 whitespace-nowrap px-2 py-2.5 hover:text-burgundy">🏠 Home</Link>
             {MENU_GROUPS.map((g) =>
               g.items.length === 0 ? (
                 <Link key={g.label} href={g.href} className="shrink-0 whitespace-nowrap px-2 py-2.5 font-bold text-burgundy hover:underline">
@@ -182,8 +201,6 @@ export default function Header() {
                 </button>
               )
             )}
-            <Link href="/about" className="shrink-0 whitespace-nowrap px-2 py-2.5 hover:text-burgundy">About</Link>
-            <Link href="/faq" className="shrink-0 whitespace-nowrap px-2 py-2.5 hover:text-burgundy">FAQ</Link>
           </div>
           <button
             type="button"
@@ -195,26 +212,34 @@ export default function Header() {
           </button>
         </div>
         {active && (
-          <div className="border-t border-pine-100 bg-white shadow-lg">
-            <div className="mx-auto max-w-7xl px-4 py-4">
-              <div className="flex items-center justify-between gap-3">
-                <p className="font-serif text-lg text-pine-900">{active.emoji} {active.label}</p>
-                <div className="flex items-center gap-3">
-                  <Link href={active.href} onClick={() => setActiveGroup(null)} className="text-sm font-semibold text-burgundy hover:underline whitespace-nowrap">
-                    View all {active.label} →
-                  </Link>
-                  <button onClick={() => setActiveGroup(null)} className="text-2xl leading-none text-stone-500" aria-label="Close menu">×</button>
-                </div>
-              </div>
-              <div className="mt-3 grid sm:grid-cols-2 lg:grid-cols-3 gap-1">
-                {active.items.map((item) => (
-                  <Link key={item.label} href={item.href} onClick={() => setActiveGroup(null)} className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm hover:bg-cream text-pine-800">
-                    <span className="w-6 text-center">{item.emoji}</span>
-                    <span>{item.label}</span>
-                  </Link>
-                ))}
+          <div className="absolute left-1/2 top-full z-50 w-[min(92vw,880px)] -translate-x-1/2 rounded-2xl border border-pine-100 bg-white shadow-2xl overflow-hidden">
+            {/* Dark-green header strip */}
+            <div className="flex items-center justify-between gap-3 bg-pine-800 px-5 py-3">
+              <p className="font-serif text-lg text-white">{active.emoji} {active.label}</p>
+              <div className="flex items-center gap-3">
+                <Link href={active.href} onClick={() => setActiveGroup(null)} className="text-sm font-semibold text-cream hover:underline whitespace-nowrap">
+                  View all {active.label} →
+                </Link>
+                <button onClick={() => setActiveGroup(null)} className="text-2xl leading-none text-cream/80 hover:text-white" aria-label="Close menu">×</button>
               </div>
             </div>
+            {/* Items — tight 3-column grid, no empty space */}
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-1 p-3">
+              {active.items.map((item) => (
+                <Link key={item.label} href={item.href} onClick={() => setActiveGroup(null)} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-cream text-pine-800">
+                  <span className="w-6 text-center">{item.emoji}</span>
+                  <span>{item.label}</span>
+                </Link>
+              ))}
+            </div>
+            {/* Promo strip — opens the 15% off popup */}
+            <button
+              type="button"
+              onClick={() => { setActiveGroup(null); setPromoOpen(true); }}
+              className="block w-full border-t border-pine-100 bg-burgundy/5 px-5 py-3 text-center text-sm font-semibold text-burgundy hover:bg-burgundy/10 transition"
+            >
+              🎉 Take 15% Off Your First Order — Claim now →
+            </button>
           </div>
         )}
       </div>
