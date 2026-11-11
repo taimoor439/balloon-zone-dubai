@@ -57,24 +57,6 @@ export const OCCASIONS = [
   { name: "Thank You", image: "photo-1527529482837-4698179dc6ce" },
 ];
 
-export const COLOURS = [
-  { name: "Chrome Gold", hex: "#c9a227" }, { name: "Rose Gold", hex: "#b76e79" },
-  { name: "Chrome Silver", hex: "#c0c0c0" }, { name: "Pearl White", hex: "#f5f0e6" },
-  { name: "Blush Pink", hex: "#f4c2c2" }, { name: "Burgundy", hex: "#7a1e2b" },
-  { name: "Pine Green", hex: "#123f31" }, { name: "Royal Blue", hex: "#1e3a8a" },
-  { name: "Ice Blue", hex: "#a5d8ff" }, { name: "Lilac", hex: "#c8a2c8" },
-  { name: "Black", hex: "#111111" }, { name: "Gold Confetti", hex: "#e6c200" },
-];
-
-export const AGES = ["1", "5", "10", "16", "18", "21", "25", "30", "40", "50", "60"];
-
-export const EXTRAS = [
-  { id: "extra-1", label: "1 Party Extra", price: 9 },
-  { id: "extra-3", label: "3 Party Extras", price: 27 },
-  { id: "extra-5", label: "5 Party Extras", price: 45 },
-  { id: "extra-10", label: "10 Party Extras", price: 90 },
-];
-
 export function formatAED(n: number) {
   return `AED ${n.toLocaleString("en-AE")}`;
 }

@@ -55,7 +55,7 @@ export default function Checkout() {
         <aside className="rounded-2xl border bg-white p-6 h-fit">
           <h2 className="font-serif text-xl text-pine-900">Order summary</h2>
           <ul className="mt-3 space-y-2 text-sm">
-            {lines.map((l) => <li key={`${l.slug}-${l.colour}`} className="flex justify-between gap-2"><span>{l.qty} × {l.name}</span><span className="font-semibold">{formatAED((l.price + (l.extrasPrice || 0)) * l.qty)}</span></li>)}
+            {lines.map((l) => <li key={l.slug} className="flex justify-between gap-2"><span>{l.qty} × {l.name}</span><span className="font-semibold">{formatAED(l.price * l.qty)}</span></li>)}
           </ul>
           <p className="flex justify-between text-sm mt-4"><span>Subtotal</span><span>{formatAED(subtotal)}</span></p>
           <p className="flex justify-between text-sm"><span>Delivery (Dubai, flat — demo rate)</span><span>{formatAED(DELIVERY)}</span></p>

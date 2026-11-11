@@ -1,26 +1,31 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useCart } from "@/lib/cart";
 import { MENU_GROUPS } from "@/lib/menu";
+import CallbackButton from "@/components/CallbackButton";
 
 const UTILITY_LINKS = [
   { href: "/about", label: "About" },
-  { href: "/faq", label: "Delivery" },
+  { href: "/delivery", label: "Delivery" },
   { href: "/contact", label: "Contacts" },
   { href: "/faq", label: "FAQ" },
   { href: "/#reviews", label: "Reviews" },
-  { href: "/about", label: "Blog" },
+  { href: "/blog", label: "Blog" },
 ];
 
 export default function Header() {
   const { count, setOpen } = useCart();
   const router = useRouter();
   const [q, setQ] = useState("");
-  const [city, setCity] = useState("Dubai");
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [openGroup, setOpenGroup] = useState<string | null>(null);
+  const [openGroup, setOpenGroup] = useState<string | null>(null); // mobile accordions
+  const [activeGroup, setActiveGroup] = useState<string | null>(null); // desktop dropdown panel
+  const [promoOpen, setPromoOpen] = useState(false);
+  const [promoEmail, setPromoEmail] = useState("");
+  const [promoClaimed, setPromoClaimed] = useState(false);
+  const navRef = useRef<HTMLDivElement>(null);
 
   const submitSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,12 +33,64 @@ export default function Header() {
     setMobileOpen(false);
   };
 
+  const scrollNav = (dir: 1 | -1) => {
+    navRef.current?.scrollBy({ left: dir * 320, behavior: "smooth" });
+  };
+
+  const closePromo = () => { setPromoOpen(false); setPromoClaimed(false); };
+  const active = MENU_GROUPS.find((g) => g.label === activeGroup) ?? null;
+
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-pine-100">
-      {/* Promo bar */}
-      <div className="bg-burgundy text-white text-center text-xs sm:text-sm font-semibold px-4 py-2">
-        🎉 Take 15% Off Your First Order — Limited Time Offer.
-      </div>
+      {/* Promo bar — clickable, opens the 15% off popup */}
+      <button
+        type="button"
+        onClick={() => setPromoOpen(true)}
+        className="block w-full bg-burgundy text-white text-center text-xs sm:text-sm font-semibold px-4 py-2 hover:bg-[#5f1622] transition"
+        aria-label="Take 15% off your first order — tap to claim"
+      >
+        🎉 Take 15% Off Your First Order — Limited Time Offer. <span className="underline underline-offset-2">Claim now →</span>
+      </button>
+
+      {/* Promo popup */}
+      {promoOpen && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Get 15% off your first order">
+          <div className="absolute inset-0 bg-black/50" onClick={closePromo} />
+          <div className="relative w-full max-w-md rounded-2xl bg-white shadow-xl p-6 text-center">
+            <button onClick={closePromo} className="absolute top-3 right-4 text-2xl text-stone-500" aria-label="Close">×</button>
+            {promoClaimed ? (
+              <div className="py-4">
+                <p className="text-4xl">🎉</p>
+                <p className="font-serif text-2xl text-pine-900 mt-2">Your code BZD15 is on its way (demo)</p>
+                <p className="text-stone-600 mt-2 text-sm">Use code <strong className="text-pine-900">BZD15</strong> at checkout for 15% off your first order. No email was actually sent — this is a demo.</p>
+                <button onClick={closePromo} className="mt-5 rounded-full bg-pine-800 text-white px-6 py-2.5 text-sm font-semibold">Start shopping</button>
+              </div>
+            ) : (
+              <>
+                <p className="text-4xl">🎉</p>
+                <p className="font-serif text-2xl text-pine-900 mt-2">Get 15% Off Your First Order</p>
+                <p className="text-sm text-stone-600 mt-1">Join the party list and we&apos;ll send your 15% off code — plus party ideas, new arrivals and subscriber-only offers.</p>
+                <form
+                  className="mt-4"
+                  onSubmit={(e) => { e.preventDefault(); if (promoEmail.trim()) setPromoClaimed(true); }}
+                >
+                  <input
+                    type="email"
+                    required
+                    value={promoEmail}
+                    onChange={(e) => setPromoEmail(e.target.value)}
+                    placeholder="Your email address"
+                    aria-label="Email address"
+                    className="w-full rounded-full border border-pine-100 bg-cream px-4 py-3 text-sm outline-none focus:border-pine-600"
+                  />
+                  <button type="submit" className="mt-3 w-full rounded-full bg-burgundy text-white py-3 font-semibold">Claim 15% Off</button>
+                  <p className="text-xs text-stone-500 mt-2">Demo only — no email is sent and no code is redeemed.</p>
+                </form>
+              </>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Utility row */}
       <div className="hidden sm:block border-b border-pine-100 bg-cream/60">
@@ -48,10 +105,12 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Main header row */}
-      <div className="mx-auto max-w-7xl px-4 py-3 flex items-center gap-3">
+      {/* Main header row — shrinks without forcing page overflow:
+          search is flex-1 min-w-0, WhatsApp/Instagram collapse to icons
+          on narrower screens, paddings are tight. */}
+      <div className="mx-auto max-w-7xl px-3 sm:px-4 py-3 flex items-center gap-2 sm:gap-3 min-w-0">
         <button
-          className="lg:hidden rounded-full border border-pine-100 px-3 py-2 text-pine-800 font-semibold"
+          className="lg:hidden shrink-0 rounded-full border border-pine-100 px-3 py-2 text-pine-800 font-semibold"
           onClick={() => setMobileOpen((v) => !v)}
           aria-label="Toggle menu"
           aria-expanded={mobileOpen}
@@ -59,32 +118,26 @@ export default function Header() {
           ☰
         </button>
         <Link href="/" className="shrink-0">
-          <span className="font-serif text-xl sm:text-2xl font-bold text-pine-900">
+          <span className="font-serif text-xl sm:text-2xl font-bold text-pine-900 whitespace-nowrap">
             🎈 Balloon Zone <span className="text-burgundy">Dubai</span>
           </span>
           <span className="block text-[10px] tracking-[0.25em] uppercase text-pine-600">Balloons · Decor · Gifts</span>
         </Link>
-        <div className="hidden md:flex items-center gap-2 flex-1 max-w-xl mx-auto">
-          <label className="flex items-center gap-1 rounded-full border border-pine-100 bg-cream px-3 py-2 text-sm whitespace-nowrap">
-            Deliver to
-            <select value={city} onChange={(e) => setCity(e.target.value)} className="bg-transparent font-semibold outline-none" aria-label="Deliver to city">
-              <option>Dubai</option><option>Abu Dhabi</option><option>Sharjah</option>
-            </select>
-          </label>
-          <form className="flex-1 flex" onSubmit={submitSearch}>
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search decorations & gifts  (Ctrl+K)" className="w-full rounded-l-full border border-pine-100 bg-cream px-4 py-2 text-sm outline-none focus:border-pine-600" aria-label="Search products" />
-            <button className="rounded-r-full bg-pine-800 text-white px-4 text-sm font-semibold" type="submit">Search</button>
+        <div className="hidden md:flex items-center gap-2 flex-1 min-w-0 max-w-xl mx-auto">
+          <form className="flex-1 flex min-w-0" onSubmit={submitSearch}>
+            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search decorations & gifts  (Ctrl+K)" className="w-full min-w-0 rounded-l-full border border-pine-100 bg-cream px-4 py-2 text-sm outline-none focus:border-pine-600" aria-label="Search products" />
+            <button className="shrink-0 rounded-r-full bg-pine-800 text-white px-4 text-sm font-semibold" type="submit">Search</button>
           </form>
         </div>
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex shrink-0 items-center gap-2">
           <a href="https://wa.me/971556821424" target="_blank" rel="noreferrer" className="hidden sm:inline-flex items-center gap-1 rounded-full bg-green-600 text-white px-3 py-2 text-sm font-semibold" aria-label="Order on WhatsApp">
-            💬 +971 55 682 1424
+            💬 <span className="hidden lg:inline">+971 55 682 1424</span>
           </a>
           <a href="https://instagram.com/balloonzonedubai" target="_blank" rel="noreferrer" className="hidden lg:inline-flex items-center gap-1 rounded-full border border-pine-100 px-3 py-2 text-sm font-semibold text-pine-800" aria-label="Balloon Zone Dubai on Instagram">
-            📸 @balloonzonedubai
+            📸 <span className="hidden xl:inline">@balloonzonedubai</span>
           </a>
-          <Link href="/contact" className="hidden xl:inline text-sm font-medium text-pine-800">Contact</Link>
-          <button onClick={() => setOpen(true)} className="relative rounded-full bg-pine-800 text-white px-4 py-2 text-sm font-semibold" aria-label="Open cart">
+          <CallbackButton className="hidden lg:inline-flex items-center gap-1 rounded-full border border-pine-800 text-pine-800 px-3 py-2 text-sm font-semibold hover:bg-pine-800 hover:text-white transition whitespace-nowrap" />
+          <button onClick={() => setOpen(true)} className="relative shrink-0 rounded-full bg-pine-800 text-white px-4 py-2 text-sm font-semibold" aria-label="Open cart">
             🛒 Cart · {count}
           </button>
         </div>
@@ -93,42 +146,82 @@ export default function Header() {
       {/* Mobile search row */}
       <div className="md:hidden px-4 pb-3">
         <form className="flex" onSubmit={submitSearch}>
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search decorations & gifts…" className="w-full rounded-l-full border border-pine-100 bg-cream px-4 py-2 text-sm outline-none" aria-label="Search products" />
-          <button className="rounded-r-full bg-pine-800 text-white px-4 text-sm font-semibold" type="submit">Search</button>
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search decorations & gifts…" className="w-full min-w-0 rounded-l-full border border-pine-100 bg-cream px-4 py-2 text-sm outline-none" aria-label="Search products" />
+          <button className="shrink-0 rounded-r-full bg-pine-800 text-white px-4 text-sm font-semibold" type="submit">Search</button>
         </form>
       </div>
 
-      {/* Mega-menu nav — desktop */}
-      <nav className="hidden lg:block border-t border-pine-100 bg-cream/70" aria-label="Main navigation">
-        <div className="mx-auto max-w-7xl px-4 flex items-center gap-1 text-sm font-medium text-pine-800">
-          <Link href="/" className="whitespace-nowrap px-2 py-2.5 hover:text-burgundy">🏠 Home</Link>
-          {MENU_GROUPS.map((g) =>
-            g.items.length === 0 ? (
-              <Link key={g.label} href={g.href} className="whitespace-nowrap px-2 py-2.5 font-bold text-burgundy hover:underline">
-                {g.emoji} {g.label}
-              </Link>
-            ) : (
-              <div key={g.label} className="relative group">
-                <Link href={g.href} className="whitespace-nowrap px-2 py-2.5 flex items-center gap-1 hover:text-burgundy">
-                  {g.emoji} {g.label} <span className="text-xs">▾</span>
+      {/* Mega-menu nav — desktop: horizontally scrollable slider.
+          The dropdown is a full-width panel BELOW this row (a sibling
+          of the scrolling container), so it is never clipped by
+          overflow-x. */}
+      <div className="hidden lg:block border-t border-pine-100 bg-cream/70" onMouseLeave={() => setActiveGroup(null)}>
+        <div className="relative mx-auto max-w-7xl">
+          <button
+            type="button"
+            onClick={() => scrollNav(-1)}
+            className="absolute left-1 top-1/2 -translate-y-1/2 z-10 rounded-full bg-white border border-pine-100 shadow px-2 py-1 text-pine-800"
+            aria-label="Scroll menu left"
+          >
+            ‹
+          </button>
+          <div ref={navRef} className="no-scrollbar flex flex-nowrap items-center gap-1 overflow-x-auto px-9 text-sm font-medium text-pine-800" role="navigation" aria-label="Main navigation">
+            <Link href="/" className="shrink-0 whitespace-nowrap px-2 py-2.5 hover:text-burgundy">🏠 Home</Link>
+            {MENU_GROUPS.map((g) =>
+              g.items.length === 0 ? (
+                <Link key={g.label} href={g.href} className="shrink-0 whitespace-nowrap px-2 py-2.5 font-bold text-burgundy hover:underline">
+                  {g.emoji} {g.label}
                 </Link>
-                <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 focus-within:visible focus-within:opacity-100 absolute left-0 top-full pt-1 transition z-50">
-                  <div className="w-72 rounded-2xl border border-pine-100 bg-white shadow-xl p-2">
-                    {g.items.map((item) => (
-                      <Link key={item.label} href={item.href} className="flex items-center gap-2 rounded-xl px-3 py-2 hover:bg-cream text-pine-800">
-                        <span className="w-6 text-center">{item.emoji}</span>
-                        <span>{item.label}</span>
-                      </Link>
-                    ))}
-                  </div>
+              ) : (
+                <button
+                  key={g.label}
+                  type="button"
+                  onMouseEnter={() => setActiveGroup(g.label)}
+                  onFocus={() => setActiveGroup(g.label)}
+                  onClick={() => setActiveGroup(activeGroup === g.label ? null : g.label)}
+                  aria-expanded={activeGroup === g.label}
+                  className={`shrink-0 whitespace-nowrap px-2 py-2.5 flex items-center gap-1 hover:text-burgundy ${activeGroup === g.label ? "text-burgundy" : ""}`}
+                >
+                  {g.emoji} {g.label} <span className="text-xs">{activeGroup === g.label ? "▴" : "▾"}</span>
+                </button>
+              )
+            )}
+            <Link href="/about" className="shrink-0 whitespace-nowrap px-2 py-2.5 hover:text-burgundy">About</Link>
+            <Link href="/faq" className="shrink-0 whitespace-nowrap px-2 py-2.5 hover:text-burgundy">FAQ</Link>
+          </div>
+          <button
+            type="button"
+            onClick={() => scrollNav(1)}
+            className="absolute right-1 top-1/2 -translate-y-1/2 z-10 rounded-full bg-white border border-pine-100 shadow px-2 py-1 text-pine-800"
+            aria-label="Scroll menu right"
+          >
+            ›
+          </button>
+        </div>
+        {active && (
+          <div className="border-t border-pine-100 bg-white shadow-lg">
+            <div className="mx-auto max-w-7xl px-4 py-4">
+              <div className="flex items-center justify-between gap-3">
+                <p className="font-serif text-lg text-pine-900">{active.emoji} {active.label}</p>
+                <div className="flex items-center gap-3">
+                  <Link href={active.href} onClick={() => setActiveGroup(null)} className="text-sm font-semibold text-burgundy hover:underline whitespace-nowrap">
+                    View all {active.label} →
+                  </Link>
+                  <button onClick={() => setActiveGroup(null)} className="text-2xl leading-none text-stone-500" aria-label="Close menu">×</button>
                 </div>
               </div>
-            )
-          )}
-          <Link href="/about" className="whitespace-nowrap px-2 py-2.5 hover:text-burgundy">About</Link>
-          <Link href="/faq" className="whitespace-nowrap px-2 py-2.5 hover:text-burgundy">FAQ</Link>
-        </div>
-      </nav>
+              <div className="mt-3 grid sm:grid-cols-2 lg:grid-cols-3 gap-1">
+                {active.items.map((item) => (
+                  <Link key={item.label} href={item.href} onClick={() => setActiveGroup(null)} className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm hover:bg-cream text-pine-800">
+                    <span className="w-6 text-center">{item.emoji}</span>
+                    <span>{item.label}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* Mobile menu — tap to open groups */}
       {mobileOpen && (
@@ -143,6 +236,9 @@ export default function Header() {
           <div className="px-4 pb-2 flex gap-2">
             <a href="https://wa.me/971556821424" target="_blank" rel="noreferrer" className="flex-1 text-center rounded-full bg-green-600 text-white px-3 py-2 text-sm font-semibold">💬 WhatsApp +971 55 682 1424</a>
             <a href="https://instagram.com/balloonzonedubai" target="_blank" rel="noreferrer" className="flex-1 text-center rounded-full border border-pine-100 px-3 py-2 text-sm font-semibold text-pine-800">📸 @balloonzonedubai</a>
+          </div>
+          <div className="px-4 pb-2">
+            <CallbackButton className="block w-full text-center rounded-full border border-pine-800 text-pine-800 px-3 py-2 text-sm font-semibold" />
           </div>
           <Link href="/" onClick={() => setMobileOpen(false)} className="block px-4 py-2.5 font-medium text-pine-800 border-t border-pine-100">🏠 Home</Link>
           {MENU_GROUPS.map((g) => (
@@ -169,6 +265,9 @@ export default function Header() {
                           <span>{item.label}</span>
                         </Link>
                       ))}
+                      <Link href={g.href} onClick={() => setMobileOpen(false)} className="block rounded-xl px-3 py-2 text-sm font-semibold text-burgundy hover:bg-white">
+                        View all {g.label} →
+                      </Link>
                     </div>
                   )}
                 </>

@@ -5,3 +5,8 @@
 
 html { scroll-behavior: smooth; }
 body { background: #faf6ee; color: #1c1917; }
+
+/* Hide scrollbars on horizontal slider rows (nav, carousels) while
+   keeping them scrollable by touch, wheel and arrow buttons. */
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }

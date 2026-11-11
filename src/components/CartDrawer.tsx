@@ -19,18 +19,17 @@ export default function CartDrawer() {
         <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
           {lines.length === 0 && <p className="text-stone-600">Your cart is empty. Add a balloon bouquet or decoration package to get started.</p>}
           {lines.map((l) => (
-            <div key={`${l.slug}-${l.colour}-${l.age}-${l.extrasLabel}`} className="flex gap-3 border rounded-xl p-3">
+            <div key={l.slug} className="flex gap-3 border rounded-xl p-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={l.image} alt={l.name} className="h-20 w-20 rounded-lg object-cover" />
               <div className="flex-1">
                 <p className="font-semibold text-pine-900 text-sm">{l.name}</p>
-                <p className="text-xs text-stone-500">{[l.colour, l.age ? `Age ${l.age}` : "", l.extrasLabel].filter(Boolean).join(" · ")}</p>
-                <p className="text-sm font-semibold mt-1">{formatAED((l.price + (l.extrasPrice || 0)) * l.qty)}</p>
+                <p className="text-sm font-semibold mt-1">{formatAED(l.price * l.qty)}</p>
                 <div className="mt-2 flex items-center gap-2">
-                  <button onClick={() => setQty(l.slug, l.colour, l.age, l.qty - 1)} className="border rounded-full w-7 h-7" aria-label="Decrease quantity">−</button>
+                  <button onClick={() => setQty(l.slug, l.qty - 1)} className="border rounded-full w-7 h-7" aria-label="Decrease quantity">−</button>
                   <span>{l.qty}</span>
-                  <button onClick={() => setQty(l.slug, l.colour, l.age, l.qty + 1)} className="border rounded-full w-7 h-7" aria-label="Increase quantity">+</button>
-                  <button onClick={() => remove(l.slug, l.colour, l.age)} className="ml-auto text-xs text-burgundy underline">Remove</button>
+                  <button onClick={() => setQty(l.slug, l.qty + 1)} className="border rounded-full w-7 h-7" aria-label="Increase quantity">+</button>
+                  <button onClick={() => remove(l.slug)} className="ml-auto text-xs text-burgundy underline">Remove</button>
                 </div>
               </div>
             </div>

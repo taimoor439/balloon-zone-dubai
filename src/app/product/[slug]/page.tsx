@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { PRODUCTS, formatAED } from "@/lib/products";
-import Configurator from "./Configurator";
+import AddToCart from "./AddToCart";
 import ProductCard from "@/components/ProductCard";
 
 export function generateStaticParams() {
@@ -38,7 +38,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
               <span key={b} className="rounded-full bg-white border border-pine-100 px-3 py-1 font-medium text-pine-800">{b}</span>
             ))}
           </div>
-          <Configurator product={p} />
+          <AddToCart product={p} />
         </div>
       </div>
       <section className="mt-12">

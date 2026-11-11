@@ -2,13 +2,14 @@
 import Link from "next/link";
 import { useState } from "react";
 import { MENU_GROUPS } from "@/lib/menu";
+import CallbackButton from "@/components/CallbackButton";
 
 const HELP_LINKS = [
   { href: "/faq", label: "FAQ" },
   { href: "/contact", label: "Contact Us" },
   { href: "/about", label: "About Us" },
   { href: "/checkout", label: "Guest Checkout — no sign-in required" },
-  { href: "/faq", label: "Delivery" },
+  { href: "/delivery", label: "Delivery" },
   { href: "/#reviews", label: "Reviews" },
 ];
 
@@ -85,6 +86,9 @@ export default function Footer() {
             <p><a href="mailto:info@balloonzonedubai.com" className="hover:text-white">✉️ info@balloonzonedubai.com</a></p>
             <p>🕘 Open daily 9 AM–9 PM<br />🚚 Same-day delivery before 6 PM</p>
           </address>
+          <div className="mt-4">
+            <CallbackButton className="inline-flex items-center gap-1 rounded-full bg-white text-pine-900 px-4 py-2 text-sm font-semibold hover:bg-cream transition whitespace-nowrap" />
+          </div>
         </div>
       </div>
 
