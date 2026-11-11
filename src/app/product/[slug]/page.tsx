@@ -11,6 +11,15 @@ export function generateMetadata({ params }: { params: { slug: string } }) {
   return { title: p ? `${p.name} | Balloon Zone Dubai` : "Product | Balloon Zone Dubai", description: p?.blurb };
 }
 
+// Second badge per category: "Fully inflated" is a balloon attribute, so
+// flowers, cakes and party supplies get their own quality badge instead.
+const QUALITY_BADGE: Record<string, string> = {
+  "Flowers": "🌹 Freshly cut & arranged",
+  "Cakes & Sweets": "🎂 Baked fresh to order",
+  "Party Supplies": "🎉 Ready to party",
+};
+const qualityBadge = (category: string) => QUALITY_BADGE[category] ?? "🎈 Fully inflated";
+
 export default function ProductPage({ params }: { params: { slug: string } }) {
   const p = PRODUCTS.find((x) => x.slug === params.slug);
   if (!p) notFound();
@@ -34,7 +43,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
           {!p.verified && <p className="mt-1 text-sm text-amber-700">Demo price — confirm at launch.</p>}
           <p className="mt-3 text-stone-700">{p.blurb}</p>
           <div className="mt-3 flex flex-wrap gap-2 text-sm">
-            {["✅ In stock", "🎈 Fully inflated", "🚚 Delivered in Dubai", "⏰ Same-day before 6 PM"].map((b) => (
+            {["✅ In stock", qualityBadge(p.category), "🚚 Delivered in Dubai", "⏰ Same-day before 6 PM"].map((b) => (
               <span key={b} className="rounded-full bg-white border border-pine-100 px-3 py-1 font-medium text-pine-800">{b}</span>
             ))}
           </div>

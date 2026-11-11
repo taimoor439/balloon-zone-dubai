@@ -142,7 +142,7 @@ export const PRODUCTS: Product[] = [
     ],
     suitableFor: ["Mother's Day", "Birthday gifts", "Thank-you gifts", "Anniversaries", "Apology gifts"],
     includes: ["Fresh roses", "Elegant keepsake box", "Gift-ready presentation", "Care card", "Same-day delivery in Dubai"] },
-  { slug: "tulip-and-lily-flower-bouquet", name: "Tulip & Lily Flower Bouquet", price: 240, category: "Flowers", occasion: "Women's Day", image: img("photo-1555009393-f20bdb245c4d"), blurb: "Bright tulips and lilies for Women's Day and every celebration of her.", verified: false,
+  { slug: "tulip-and-lily-flower-bouquet", name: "Tulip & Lily Flower Bouquet", price: 240, category: "Flowers", occasion: "Women's Day", image: img("photo-1561181286-d3fee7d55364"), blurb: "Bright tulips and lilies for Women's Day and every celebration of her.", verified: false,
     description: [
       "Bright, joyful and full of life. Tulips and lilies in cheerful colours make this bouquet a celebration of her — perfect for Women's Day, birthdays and every moment she deserves flowers.",
       "Freshly arranged and delivered in Dubai, ready to gift. Order before 6 PM for same-day delivery.",
@@ -176,7 +176,7 @@ export const OCCASIONS = [
   { name: "National Day", image: "photo-1514525253161-7a46d19cd819" },
   { name: "Valentine's Day", image: "photo-1519741497674-611481863552" },
   { name: "Mother's Day", image: "photo-1519225421980-715cb0215aed" },
-  { name: "Women's Day", image: "photo-1555009393-f20bdb245c4d" },
+  { name: "Women's Day", image: "photo-1561181286-d3fee7d55364" },
   { name: "Thank You", image: "photo-1527529482837-4698179dc6ce" },
 ];
 
