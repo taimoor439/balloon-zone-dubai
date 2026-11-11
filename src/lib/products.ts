@@ -32,6 +32,14 @@ export const PRODUCTS: Product[] = [
   { slug: "uae-flag-day-arch", name: "UAE Flag Day Arch", price: 550, category: "Balloon Arches", occasion: "National Day", image: img("photo-1530103862676-de8c9debad1d"), blurb: "UAE Flag Day balloon arch in red, green, white and black.", verified: true },
   { slug: "rose-gold-birthday-bouquet", name: "Rose Gold Birthday Bouquet", price: 210, category: "Balloon Bouquets", occasion: "Birthday", image: img("photo-1527529482837-4698179dc6ce"), blurb: "Rose-gold helium bouquet — a demo listing within the verified bouquet range (AED 90–495).", verified: false },
   { slug: "butterfly-wings-party-set", name: "Butterfly Wings Set — Kid's Costume Party", price: 15, category: "Party Supplies", occasion: "Birthday", image: img("photo-1504196606672-aef5c9cefc92"), blurb: "Butterfly wings for a kid's costume party.", verified: true },
+  // Demo listings added Nov 2026 so the new mega-menu filters (flowers,
+  // bouquets, cakes) have products to show. Prices are NOT verified live.
+  { slug: "thank-you-balloon-bouquet", name: "Thank You Balloon Bouquet", price: 150, category: "Balloon Bouquets", occasion: "Thank You", image: img("photo-1527529482837-4698179dc6ce"), blurb: "A warm thank-you in balloons — soft golds and cream, ready to gift.", verified: false },
+  { slug: "love-you-rose-bouquet", name: "Love You Rose Bouquet", price: 220, category: "Balloon Bouquets", occasion: "Valentine's Day", image: img("photo-1519741497674-611481863552"), blurb: "Romantic rose and balloon bouquet for Valentine's Day and anniversaries.", verified: false },
+  { slug: "fresh-rose-flower-box", name: "Fresh Rose Flower Box", price: 260, category: "Flowers", occasion: "Mother's Day", image: img("photo-1519225421980-715cb0215aed"), blurb: "Fresh roses arranged in a keepsake box — a classic Mother's Day gift.", verified: false },
+  { slug: "tulip-and-lily-flower-bouquet", name: "Tulip & Lily Flower Bouquet", price: 240, category: "Flowers", occasion: "Women's Day", image: img("photo-1555009393-f20bdb245c4d"), blurb: "Bright tulips and lilies for Women's Day and every celebration of her.", verified: false },
+  { slug: "cream-celebration-cake", name: "Cream Celebration Cake", price: 230, category: "Cakes & Sweets", occasion: "Birthday", image: img("photo-1578985545062-69928b1d9587"), blurb: "Soft cream cake, made to order for birthdays and family gatherings.", verified: false },
+  { slug: "pastries-and-cupcakes-box", name: "Pastries & Cupcakes Box", price: 120, category: "Cakes & Sweets", occasion: "Birthday", image: img("photo-1504196606672-aef5c9cefc92"), blurb: "A box of pastries and cupcakes to share at the party table.", verified: false },
 ];
 
 export const OCCASIONS = [
@@ -43,6 +51,10 @@ export const OCCASIONS = [
   { name: "Graduation", image: "photo-1523050854058-8df90110c9f1" },
   { name: "New Year", image: "photo-1498931299472-f7a63a5a1cfa" },
   { name: "National Day", image: "photo-1514525253161-7a46d19cd819" },
+  { name: "Valentine's Day", image: "photo-1519741497674-611481863552" },
+  { name: "Mother's Day", image: "photo-1519225421980-715cb0215aed" },
+  { name: "Women's Day", image: "photo-1555009393-f20bdb245c4d" },
+  { name: "Thank You", image: "photo-1527529482837-4698179dc6ce" },
 ];
 
 export const COLOURS = [

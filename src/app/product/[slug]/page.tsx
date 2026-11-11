@@ -29,7 +29,11 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
           <p className="mt-2 text-2xl font-bold text-pine-900">{formatAED(p.price)} {p.wasPrice && <s className="text-stone-400 text-lg font-normal">{formatAED(p.wasPrice)}</s>}</p>
           {!p.verified && <p className="mt-1 text-sm text-amber-700">Demo price — confirm at launch.</p>}
           <p className="mt-3 text-stone-700">{p.blurb}</p>
-          <p className="mt-2 text-sm text-stone-600">In stock · Fully inflated · Delivered in Dubai · Same-day before 6 PM</p>
+          <div className="mt-3 flex flex-wrap gap-2 text-sm">
+            {["✅ In stock", "🎈 Fully inflated", "🚚 Delivered in Dubai", "⏰ Same-day before 6 PM"].map((b) => (
+              <span key={b} className="rounded-full bg-white border border-pine-100 px-3 py-1 font-medium text-pine-800">{b}</span>
+            ))}
+          </div>
           <Configurator product={p} />
         </div>
       </div>

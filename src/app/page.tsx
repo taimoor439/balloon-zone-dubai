@@ -88,7 +88,7 @@ export default function Home() {
       </section>
 
       {/* Reviews — each shown once */}
-      <section className="mx-auto max-w-7xl px-4 mt-12">
+      <section id="reviews" className="mx-auto max-w-7xl px-4 mt-12">
         <h2 className="font-serif text-3xl text-pine-900">What customers say</h2>
         <p className="text-sm text-stone-500 mt-1">Sample reviews shown once in this demo — real reviews will carry dates and verified-buyer labels at launch.</p>
         <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

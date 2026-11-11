@@ -3,8 +3,18 @@ import Link from "next/link";
 import { formatAED, type Product } from "@/lib/products";
 import { useCart } from "@/lib/cart";
 
+const CATEGORY_EMOJI: Record<string, string> = {
+  "Decoration Packages": "✨",
+  "Cakes & Sweets": "🍰",
+  "Balloon Bouquets": "🎈",
+  "Balloon Arches": "🌸",
+  "Party Supplies": "🎉",
+  "Flowers": "🌹",
+};
+
 export default function ProductCard({ p }: { p: Product }) {
   const { add } = useCart();
+  const discount = p.wasPrice ? Math.round((1 - p.price / p.wasPrice) * 100) : 0;
   return (
     <article className="rounded-2xl border border-pine-100 bg-white overflow-hidden flex flex-col shadow-sm hover:shadow-md transition">
       <Link href={`/product/${p.slug}`} className="block bg-pine-800">
@@ -12,9 +22,10 @@ export default function ProductCard({ p }: { p: Product }) {
         <img src={p.image} alt={p.name} className="h-52 w-full object-cover" loading="lazy" />
       </Link>
       <div className="p-4 flex flex-col gap-2 flex-1">
-        <div className="flex gap-2 text-xs">
+        <div className="flex flex-wrap items-center gap-2 text-xs">
           {p.badge && <span className="rounded-full bg-burgundy text-white px-2 py-0.5">{p.badge}</span>}
-          <span className="text-pine-600">{p.category}</span>
+          {discount > 0 && <span className="rounded-full bg-green-600 text-white px-2 py-0.5 font-semibold">🏷️ −{discount}%</span>}
+          <span className="rounded-full bg-cream border border-pine-100 px-2 py-0.5 text-pine-700">{CATEGORY_EMOJI[p.category] ?? "🎈"} {p.category}</span>
         </div>
         <Link href={`/product/${p.slug}`} className="font-serif text-lg leading-snug text-pine-900">{p.name}</Link>
         <p className="text-sm text-stone-600 flex-1">{p.blurb}</p>
