@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import { useCart } from "@/lib/cart";
 import { MENU_GROUPS } from "@/lib/menu";
 import CallbackButton from "@/components/CallbackButton";
+import Modal from "@/components/Modal";
 
 const UTILITY_LINKS = [
   { href: "/about", label: "About" },
@@ -52,45 +53,40 @@ export default function Header() {
         🎉 Take 15% Off Your First Order — Limited Time Offer. <span className="underline underline-offset-2">Claim now →</span>
       </button>
 
-      {/* Promo popup */}
-      {promoOpen && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Get 15% off your first order">
-          <div className="absolute inset-0 bg-black/50" onClick={closePromo} />
-          <div className="relative w-full max-w-md rounded-2xl bg-white shadow-xl p-6 text-center">
-            <button onClick={closePromo} className="absolute top-3 right-4 text-2xl text-stone-500" aria-label="Close">×</button>
-            {promoClaimed ? (
-              <div className="py-4">
-                <p className="text-4xl">🎉</p>
-                <p className="font-serif text-2xl text-pine-900 mt-2">Your code BZD15 is on its way (demo)</p>
-                <p className="text-stone-600 mt-2 text-sm">Use code <strong className="text-pine-900">BZD15</strong> at checkout for 15% off your first order. No email was actually sent — this is a demo.</p>
-                <button onClick={closePromo} className="mt-5 rounded-full bg-pine-800 text-white px-6 py-2.5 text-sm font-semibold">Start shopping</button>
-              </div>
-            ) : (
-              <>
-                <p className="text-4xl">🎉</p>
-                <p className="font-serif text-2xl text-pine-900 mt-2">Get 15% Off Your First Order</p>
-                <p className="text-sm text-stone-600 mt-1">Join the party list and we&apos;ll send your 15% off code — plus party ideas, new arrivals and subscriber-only offers.</p>
-                <form
-                  className="mt-4"
-                  onSubmit={(e) => { e.preventDefault(); if (promoEmail.trim()) setPromoClaimed(true); }}
-                >
-                  <input
-                    type="email"
-                    required
-                    value={promoEmail}
-                    onChange={(e) => setPromoEmail(e.target.value)}
-                    placeholder="Your email address"
-                    aria-label="Email address"
-                    className="w-full rounded-full border border-pine-100 bg-cream px-4 py-3 text-sm outline-none focus:border-pine-600"
-                  />
-                  <button type="submit" className="mt-3 w-full rounded-full bg-burgundy text-white py-3 font-semibold">Claim 15% Off</button>
-                  <p className="text-xs text-stone-500 mt-2">Demo only — no email is sent and no code is redeemed.</p>
-                </form>
-              </>
-            )}
+      {/* Promo popup — rendered through a portal (see Modal.tsx) so the
+          sticky header's backdrop-blur can't trap it inside the header. */}
+      <Modal open={promoOpen} onClose={closePromo} label="Get 15% off your first order" dialogClassName="text-center">
+        {promoClaimed ? (
+          <div className="py-4">
+            <p className="text-4xl">🎉</p>
+            <p className="font-serif text-2xl text-pine-900 mt-2">Your code BZD15 is on its way (demo)</p>
+            <p className="text-stone-600 mt-2 text-sm">Use code <strong className="text-pine-900">BZD15</strong> at checkout for 15% off your first order. No email was actually sent — this is a demo.</p>
+            <button onClick={closePromo} className="mt-5 rounded-full bg-pine-800 text-white px-6 py-2.5 text-sm font-semibold">Start shopping</button>
           </div>
-        </div>
-      )}
+        ) : (
+          <>
+            <p className="text-4xl">🎉</p>
+            <p className="font-serif text-2xl text-pine-900 mt-2">Get 15% Off Your First Order</p>
+            <p className="text-sm text-stone-600 mt-1">Join the party list and we&apos;ll send your 15% off code — plus party ideas, new arrivals and subscriber-only offers.</p>
+            <form
+              className="mt-4"
+              onSubmit={(e) => { e.preventDefault(); if (promoEmail.trim()) setPromoClaimed(true); }}
+            >
+              <input
+                type="email"
+                required
+                value={promoEmail}
+                onChange={(e) => setPromoEmail(e.target.value)}
+                placeholder="Your email address"
+                aria-label="Email address"
+                className="w-full rounded-full border border-pine-100 bg-cream px-4 py-3 text-sm outline-none focus:border-pine-600"
+              />
+              <button type="submit" className="mt-3 w-full rounded-full bg-burgundy text-white py-3 font-semibold">Claim 15% Off</button>
+              <p className="text-xs text-stone-500 mt-2">Demo only — no email is sent and no code is redeemed.</p>
+            </form>
+          </>
+        )}
+      </Modal>
 
       {/* Utility row */}
       <div className="hidden sm:block border-b border-pine-100 bg-cream/60">
