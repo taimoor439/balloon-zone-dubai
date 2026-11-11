@@ -42,6 +42,15 @@ live price — confirm it at launch. Party Extras add-on pricing
 (+AED 9 / 27 / 45 / 90) is demo pricing, modelled on the competitor
 configurator pattern.
 
+## Deploy
+
+- **GitHub Pages (live):** `GITHUB_PAGES=true npm run build` produces the
+  static export in `out/`, which is pushed to the `gh-pages` branch.
+  Live at https://taimoor439.github.io/balloon-zone-dubai/ — the `basePath`
+  is only set when `GITHUB_PAGES=true`, so a Vercel deploy at a root domain
+  needs no prefix.
+- **Vercel:** plain `npm run build` (no `GITHUB_PAGES` flag).
+
 ## Audit fixes applied
 
 - Unique page titles and meta descriptions on every page.

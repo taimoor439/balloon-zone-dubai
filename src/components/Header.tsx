@@ -22,7 +22,7 @@ export default function Header() {
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-pine-100">
       <div className="bg-pine-900 text-cream text-xs sm:text-sm">
         <div className="mx-auto max-w-7xl px-4 py-2 flex items-center justify-between gap-3">
-          <span>Order before 5 PM for same-day delivery in Dubai</span>
+          <span>Order before 6 PM for same-day delivery in Dubai</span>
           <span className="hidden sm:inline">WhatsApp +971 55 682 1424</span>
         </div>
       </div>
