@@ -10,3 +10,29 @@ body { background: #faf6ee; color: #1c1917; }
    keeping them scrollable by touch, wheel and arrow buttons. */
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* Hero carousel slide change — fade + slight rise. */
+@keyframes hero-fade-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.hero-slide-in { animation: hero-fade-in .7s ease both; }
+
+/* Trust strip icon animations — one looping motion per item. */
+@keyframes trust-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes trust-drive { 0%, 100% { transform: translateX(-3px); } 50% { transform: translateX(4px); } }
+@keyframes trust-twinkle { 0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); } 50% { opacity: .55; transform: scale(.82) rotate(12deg); } }
+@keyframes trust-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }
+.trust-float { animation: trust-float 3s ease-in-out infinite; }
+.trust-drive { animation: trust-drive 2.6s ease-in-out infinite; }
+.trust-twinkle { animation: trust-twinkle 2.2s ease-in-out infinite; }
+.trust-pulse { animation: trust-pulse 2.4s ease-in-out infinite; }
+
+/* Trust strip entrance — items start hidden and rise in one by one
+   (stagger via inline transition-delay) once .trust-visible is set by
+   the IntersectionObserver in TrustStrip.tsx. Hover lifts each item. */
+.trust-item { opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease, box-shadow .3s ease, background-color .3s ease; }
+.trust-visible .trust-item { opacity: 1; transform: translateY(0); }
+.trust-visible .trust-item:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(15, 61, 46, .12); }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-slide-in, .trust-float, .trust-drive, .trust-twinkle, .trust-pulse { animation: none; }
+  .trust-item { opacity: 1; transform: none; transition: none; }
+}

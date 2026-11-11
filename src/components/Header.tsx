@@ -33,6 +33,17 @@ export default function Header() {
   const [promoClaimed, setPromoClaimed] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
   const navAreaRef = useRef<HTMLDivElement>(null);
+  // Hide the promo bar + utility row once the user scrolls down, so the
+  // sticky header shrinks to just the main row + nav slider. Both rows
+  // reappear at the top of the page. The collapse is a max-height /
+  // opacity transition so the page does not jump.
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   // Dropdown closes on Escape, on page scroll, and on a click outside the
   // nav area (mouse-leave of the header area is handled on the wrapper).
@@ -68,6 +79,10 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-pine-100">
+      {/* Top rows — collapse away on scroll, reappear at the top. The
+          promo popup is a portal (Modal.tsx), so hiding these rows never
+          traps it. */}
+      <div className={`overflow-hidden transition-all duration-300 ${scrolled ? "max-h-0 opacity-0" : "max-h-24 opacity-100"}`}>
       {/* Promo bar — clickable, opens the 15% off popup */}
       <button
         type="button"
@@ -125,6 +140,7 @@ export default function Header() {
           <span className="whitespace-nowrap font-medium">🚚 Today delivery before 6 PM</span>
         </div>
       </div>
+      </div>{/* end collapsible top rows */}
 
       {/* Main header row — shrinks without forcing page overflow:
           search is flex-1 min-w-0, WhatsApp/Instagram collapse to icons

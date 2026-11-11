@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { PRODUCTS, OCCASIONS, countByOccasion, formatAED } from "@/lib/products";
 import ProductCard from "@/components/ProductCard";
+import HeroCarousel from "@/components/HeroCarousel";
+import TrustStrip from "@/components/TrustStrip";
 
 export const metadata = {
   title: "Balloon Zone Dubai | Same Day Balloon Delivery, Decorations & Gifts",
@@ -19,32 +21,11 @@ export default function Home() {
   const under500 = PRODUCTS.filter((p) => p.price < 500);
   return (
     <div>
-      {/* Hero */}
-      <section className="relative bg-pine-900 text-cream overflow-hidden">
-        <div className="absolute inset-0 opacity-25">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=1800&q=80" alt="" className="h-full w-full object-cover" />
-        </div>
-        <div className="relative mx-auto max-w-7xl px-4 py-16 sm:py-24">
-          <p className="text-xs tracking-[0.3em] uppercase text-gold font-semibold">Make every moment extra special</p>
-          <h1 className="font-serif text-4xl sm:text-6xl font-bold leading-tight max-w-2xl mt-3">Balloon Delivery &amp; Balloon Decorations in Dubai</h1>
-          <p className="mt-4 max-w-xl text-cream/85 text-lg">Luxury balloon decorations, bouquets, cakes and flowers — beautifully designed for birthdays, weddings, baby showers and special events across Dubai.</p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Link href="/shop" className="rounded-full bg-white text-pine-900 px-6 py-3 font-semibold">Shop Balloons</Link>
-            <Link href="/shop?category=Decoration Packages" className="rounded-full border border-white/70 px-6 py-3 font-semibold">Book Decoration</Link>
-          </div>
-          <p className="mt-4 text-sm text-cream/75">Same-day delivery before 6 PM · Fully inflated on arrival · Delivery guarantee</p>
-        </div>
-      </section>
+      {/* Hero — 3-slide auto-rotating carousel (Balloons / Cakes / Flowers) */}
+      <HeroCarousel />
 
-      {/* Trust strip */}
-      <section className="mx-auto max-w-7xl px-4 -mt-6 relative">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 bg-white rounded-2xl shadow p-4 text-center">
-          {[["Fully Inflated", "Arrives ready to enjoy — no setup needed."], ["Same-Day Delivery", "Order before 6 PM for same-day delivery in Dubai."], ["Premium Quality", "High-quality balloons with elegant finishes."], ["Delivery Guarantee", "Replacement or refund if damaged on arrival."]].map(([t, d]) => (
-            <div key={t}><p className="font-serif font-semibold text-pine-900">{t}</p><p className="text-sm text-stone-600">{d}</p></div>
-          ))}
-        </div>
-      </section>
+      {/* Trust strip — animated icons, staggered fade-in */}
+      <TrustStrip />
 
       {/* Occasions */}
       <section className="mx-auto max-w-7xl px-4 mt-12">
