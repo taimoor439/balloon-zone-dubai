@@ -156,7 +156,7 @@ export const PRODUCTS: Product[] = [
     ],
     suitableFor: ["Birthday parties", "Family gatherings", "Office celebrations", "Cake-cutting moments", "Dessert tables"],
     includes: ["Freshly baked cream cake", "Smooth cream frosting", "Decorative finish", "Careful cake packaging", "Same-day delivery in Dubai"] },
-  { slug: "pastries-and-cupcakes-box", name: "Pastries & Cupcakes Box", price: 120, category: "Cakes & Sweets", occasion: "Birthday", image: img("photo-1504196606672-aef5c9cefc92"), blurb: "A box of pastries and cupcakes to share at the party table.", verified: false,
+  { slug: "pastries-and-cupcakes-box", name: "Pastries & Cupcakes Box", price: 120, category: "Cakes & Sweets", occasion: "Birthday", image: img("photo-1486427944299-d1955d23e34d"), blurb: "A box of pastries and cupcakes to share at the party table.", verified: false,
     description: [
       "A little bit of everything sweet. This box of pastries and cupcakes is made for sharing — set it on the party table and watch it disappear.",
       "Freshly baked and delivered in Dubai, ready to serve. Order before 6 PM for same-day delivery.",

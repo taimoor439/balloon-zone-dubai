@@ -15,11 +15,13 @@ body { background: #faf6ee; color: #1c1917; }
 @keyframes hero-fade-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 .hero-slide-in { animation: hero-fade-in .7s ease both; }
 
-/* Trust strip icon animations — one looping motion per item. */
-@keyframes trust-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-@keyframes trust-drive { 0%, 100% { transform: translateX(-3px); } 50% { transform: translateX(4px); } }
-@keyframes trust-twinkle { 0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); } 50% { opacity: .55; transform: scale(.82) rotate(12deg); } }
-@keyframes trust-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }
+/* Trust strip icon animations — one looping motion per item. Amplitudes
+   are deliberately large enough to see in screenshots taken seconds
+   apart (float ±8px, drive ±6px, twinkle shrinks/fades, pulse to 1.15). */
+@keyframes trust-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes trust-drive { 0%, 100% { transform: translateX(-5px); } 50% { transform: translateX(6px); } }
+@keyframes trust-twinkle { 0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); } 50% { opacity: .5; transform: scale(.8) rotate(12deg); } }
+@keyframes trust-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
 .trust-float { animation: trust-float 3s ease-in-out infinite; }
 .trust-drive { animation: trust-drive 2.6s ease-in-out infinite; }
 .trust-twinkle { animation: trust-twinkle 2.2s ease-in-out infinite; }
