@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
+import WhatsAppFloat from "@/components/WhatsAppFloat";
 import { CartProvider } from "@/lib/cart";
 
 export const metadata: Metadata = {
@@ -19,7 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <main className="flex-1">{children}</main>
           <Footer />
           <CartDrawer />
-          <a href="https://wa.me/971556821424" target="_blank" rel="noreferrer" className="fixed bottom-5 right-5 z-40 rounded-full bg-green-600 text-white px-4 py-3 text-sm font-semibold shadow-lg" aria-label="Order on WhatsApp">WhatsApp us</a>
+          <WhatsAppFloat />
         </CartProvider>
       </body>
     </html>

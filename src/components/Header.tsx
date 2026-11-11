@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useCart } from "@/lib/cart";
 import { MENU_GROUPS } from "@/lib/menu";
@@ -22,8 +22,9 @@ const UTILITY_LINKS = [
 const viewAllLabel = (label: string) => label.replace(/^All /, "");
 
 export default function Header() {
-  const { count, setOpen } = useCart();
+  const pathname = usePathname();
   const router = useRouter();
+  const { count, setOpen } = useCart();
   const [q, setQ] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openGroup, setOpenGroup] = useState<string | null>(null); // mobile accordions
@@ -76,6 +77,10 @@ export default function Header() {
 
   const closePromo = () => { setPromoOpen(false); setPromoClaimed(false); };
   const active = MENU_GROUPS.find((g) => g.label === activeGroup) ?? null;
+
+  // The admin area has its own sidebar layout — no public header there.
+  // (Checked here, after all hooks, so hook order never changes.)
+  if (pathname?.startsWith("/admin")) return null;
 
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-pine-100">

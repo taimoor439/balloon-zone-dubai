@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Modal from "@/components/Modal";
+import { saveCallback } from "@/lib/admin";
 
 /**
  * "Request a Callback" button + popup modal.
@@ -43,7 +44,7 @@ export default function CallbackButton({ className, label = "📞 Request a Call
             <p className="text-sm text-stone-600 mt-1">Tell us when to call — we&apos;ll ring you back about your celebration.</p>
             <form
               className="mt-4 space-y-3"
-              onSubmit={(e) => { e.preventDefault(); if (name.trim() && phone.trim()) setDone(true); }}
+              onSubmit={(e) => { e.preventDefault(); if (name.trim() && phone.trim()) { saveCallback({ id: `CB-${Date.now().toString(36)}`, name: name.trim(), phone: phone.trim(), time, date: new Date().toISOString(), status: "New" }); setDone(true); } }}
             >
               <div>
                 <label htmlFor="cb-name" className="text-sm font-semibold">Your name</label>

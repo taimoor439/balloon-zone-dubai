@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { MENU_GROUPS } from "@/lib/menu";
 import CallbackButton from "@/components/CallbackButton";
 
@@ -11,11 +12,16 @@ const HELP_LINKS = [
   { href: "/checkout", label: "Guest Checkout — no sign-in required" },
   { href: "/delivery", label: "Delivery" },
   { href: "/#reviews", label: "Reviews" },
+  { href: "/admin", label: "Admin" },
 ];
 
 export default function Footer() {
+  const pathname = usePathname();
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+
+  // The admin area has its own sidebar layout — no public footer there.
+  if (pathname?.startsWith("/admin")) return null;
 
   return (
     <footer className="bg-pine-950 text-cream/85 mt-16">

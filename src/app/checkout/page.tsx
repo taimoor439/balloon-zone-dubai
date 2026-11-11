@@ -3,6 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useCart } from "@/lib/cart";
 import { formatAED } from "@/lib/products";
+import { saveOrder } from "@/lib/admin";
 
 const DELIVERY = 29;
 
@@ -40,7 +41,7 @@ export default function Checkout() {
       <h1 className="font-serif text-4xl text-pine-900">Guest Checkout</h1>
       <p className="text-stone-600 mt-2">No sign-in required. Demo only — no payment is taken and no real order is placed.</p>
       <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_380px]">
-        <form className="rounded-2xl border bg-white p-6 space-y-4" onSubmit={(e) => { e.preventDefault(); if (!name || !phone || !address || !date) { setError("Please fill in name, phone, delivery address and date."); return; } setDone(`BZD-DEMO-${Math.floor(1000 + Math.random() * 9000)}`); clear(); }}>
+        <form className="rounded-2xl border bg-white p-6 space-y-4" onSubmit={(e) => { e.preventDefault(); if (!name || !phone || !address || !date) { setError("Please fill in name, phone, delivery address and date."); return; } const orderId = `BZD-DEMO-${Math.floor(1000 + Math.random() * 9000)}`; saveOrder({ id: orderId, date: new Date().toISOString(), customer: name, phone, address, items: lines.map((l) => ({ name: l.name, qty: l.qty, price: l.price })), subtotal, delivery: DELIVERY, total: subtotal + DELIVERY, status: "Pending" }); setDone(orderId); clear(); }}>
           {error && <p className="text-burgundy text-sm" role="alert">{error}</p>}
           <div><label className="text-sm font-semibold" htmlFor="name">Full name</label><input id="name" value={name} onChange={(e) => setName(e.target.value)} className="mt-1 w-full rounded-full border px-4 py-2" placeholder="Your name" /></div>
           <div><label className="text-sm font-semibold" htmlFor="phone">Phone / WhatsApp</label><input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} className="mt-1 w-full rounded-full border px-4 py-2" placeholder="+971 …" /></div>

@@ -2,25 +2,34 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { PRODUCTS, formatAED } from "@/lib/products";
+import { useMergedProducts } from "@/lib/catalog";
 import ProductCard from "@/components/ProductCard";
 
-const CATEGORIES = ["All", ...Array.from(new Set(PRODUCTS.map((p) => p.category)))];
-const OCCASIONS = ["All", ...Array.from(new Set(PRODUCTS.map((p) => p.occasion)))];
-
-function readParams(params: URLSearchParams) {
+function readParams(params: URLSearchParams, cats: string[], occs: string[]) {
   const cat = params.get("category") ?? "All";
   const occ = params.get("occasion") ?? "All";
   return {
     q: params.get("q") ?? "",
-    cat: CATEGORIES.includes(cat) ? cat : "All",
-    occ: OCCASIONS.includes(occ) ? occ : "All",
+    cat: cats.includes(cat) ? cat : "All",
+    occ: occs.includes(occ) ? occ : "All",
     sale: params.get("sale") === "1",
   };
 }
 
 export default function ShopClient() {
   const params = useSearchParams();
-  const [initial] = useState(() => readParams(params));
+  // Merged catalogue: base products + admin overrides / added products
+  // from localStorage — admin edits show up here without a rebuild.
+  const products = useMergedProducts();
+  const CATEGORIES = useMemo(
+    () => ["All", ...Array.from(new Set(products.map((p) => p.category)))],
+    [products]
+  );
+  const OCCASIONS = useMemo(
+    () => ["All", ...Array.from(new Set(products.map((p) => p.occasion)))],
+    [products]
+  );
+  const [initial] = useState(() => readParams(params, CATEGORIES, OCCASIONS));
   const [q, setQ] = useState(initial.q);
   const [cat, setCat] = useState(initial.cat);
   const [occ, setOcc] = useState(initial.occ);
@@ -32,15 +41,15 @@ export default function ShopClient() {
   // up client-side. (Reading searchParams in the server page broke the
   // static export, so this component is the only place that reads the URL.)
   useEffect(() => {
-    const next = readParams(params);
+    const next = readParams(params, CATEGORIES, OCCASIONS);
     setQ(next.q);
     setCat(next.cat);
     setOcc(next.occ);
     setSaleOnly(next.sale);
-  }, [params]);
+  }, [params, CATEGORIES, OCCASIONS]);
 
   const filtered = useMemo(() => {
-    let list = PRODUCTS.filter((p) =>
+    let list = products.filter((p) =>
       (cat === "All" || p.category === cat) &&
       (occ === "All" || p.occasion === occ) &&
       (!saleOnly || p.wasPrice !== undefined) &&
@@ -51,7 +60,7 @@ export default function ShopClient() {
     if (sort === "high") list = [...list].sort((a, b) => b.price - a.price);
     if (sort === "name") list = [...list].sort((a, b) => a.name.localeCompare(b.name));
     return list;
-  }, [q, cat, occ, saleOnly, maxPrice, sort]);
+  }, [products, q, cat, occ, saleOnly, maxPrice, sort]);
 
   const activeFilters: { label: string; clear: () => void }[] = [
     ...(q ? [{ label: `🔍 “${q}”`, clear: () => setQ("") }] : []),
@@ -65,7 +74,7 @@ export default function ShopClient() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
       <h1 className="font-serif text-4xl text-pine-900">Shop Balloons &amp; Decorations</h1>
-      <p className="text-stone-600 mt-2">{filtered.length} of {PRODUCTS.length} products · Prices in AED · Same-day before 6 PM</p>
+      <p className="text-stone-600 mt-2">{filtered.length} of {products.length} products · Prices in AED · Same-day before 6 PM</p>
 
       {activeFilters.length > 0 && (
         <div className="mt-4 flex flex-wrap items-center gap-2 rounded-2xl border border-pine-100 bg-white p-3 text-sm">
