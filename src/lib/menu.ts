@@ -21,6 +21,9 @@ export const MENU_GROUPS: MenuGroup[] = [
     emoji: "🎉",
     href: "/shop",
     items: [
+      { label: "Happy Birthday", emoji: "🎂", href: occ("Birthday") },
+      { label: "Baby Shower", emoji: "🍼", href: occ("Baby Shower") },
+      { label: "Wedding", emoji: "💍", href: occ("Wedding") },
       { label: "Flag Day", emoji: "🇦🇪", href: occ("National Day") },
       { label: "Women's Day", emoji: "🌸", href: occ("Women's Day") },
       { label: "Happy New Year", emoji: "🎆", href: occ("New Year") },

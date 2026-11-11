@@ -19,9 +19,13 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
     <div className="mx-auto max-w-7xl px-4 py-8">
       <nav className="text-sm text-stone-500" aria-label="Breadcrumb"><a href="/">Home</a> · <a href="/shop">Shop</a> · {p.name}</nav>
       <div className="mt-4 grid gap-8 lg:grid-cols-2">
-        <div className="rounded-2xl overflow-hidden bg-pine-800">
+        {/* Image panel: fixed 4:3 aspect, image fills it fully. The old
+            version stretched a tall dark-green panel to the height of the
+            right column while the image was only 420px tall, leaving a
+            large empty block below the photo. */}
+        <div className="rounded-2xl overflow-hidden bg-pine-100 aspect-[4/3] self-start">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={p.image} alt={p.name} className="w-full h-[420px] object-cover" />
+          <img src={p.image} alt={p.name} className="h-full w-full object-cover" />
         </div>
         <div>
           <p className="text-sm text-pine-600">{p.category} · {p.occasion}</p>

@@ -51,14 +51,27 @@ export default function Home() {
         <h2 className="font-serif text-3xl text-pine-900">Shop by Occasion</h2>
         <p className="text-stone-600 mt-1">Clean categories — no duplicates, every tile shows how many products it holds.</p>
         <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {OCCASIONS.map((o) => (
-            <Link key={o.name} href={`/shop?occasion=${encodeURIComponent(o.name)}`} className="relative rounded-2xl overflow-hidden h-40 block group">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={`https://images.unsplash.com/photo-${o.image}?auto=format&fit=crop&w=600&q=80`} alt={o.name} className="h-full w-full object-cover group-hover:scale-105 transition" loading="lazy" />
-              <span className="absolute inset-0 bg-gradient-to-t from-pine-950/80 to-transparent" />
-              <span className="absolute bottom-3 left-3 text-white"><span className="font-serif text-lg block">{o.name}</span><span className="text-xs">{countByOccasion(o.name)} products</span></span>
-            </Link>
-          ))}
+          {OCCASIONS.map((o) => {
+            // Tile photo = the real photo of a product from this occasion
+            // (products.ts). Never build a photo URL from the occasion
+            // name — the old code doubled the "photo-" prefix and 404'd.
+            const tile = PRODUCTS.find((p) => p.occasion === o.name);
+            const emoji: Record<string, string> = { Birthday: "🎂", "Baby Shower": "🍼", Wedding: "💍", Proposal: "💍", Newborn: "👶", Graduation: "🎓", "New Year": "🎆", "National Day": "🇦🇪", "Valentine's Day": "❤️", "Mother's Day": "💐", "Women's Day": "🌸", "Thank You": "🙏" };
+            return (
+              <Link key={o.name} href={`/shop?occasion=${encodeURIComponent(o.name)}`} className="relative rounded-2xl overflow-hidden h-40 block group">
+                {tile ? (
+                  <>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={tile.image} alt={o.name} className="h-full w-full object-cover group-hover:scale-105 transition" loading="lazy" />
+                    <span className="absolute inset-0 bg-gradient-to-t from-pine-950/80 to-transparent" />
+                  </>
+                ) : (
+                  <span className="absolute inset-0 bg-gradient-to-br from-pine-800 to-burgundy flex items-center justify-center text-6xl" aria-hidden="true">{emoji[o.name] || "🎈"}</span>
+                )}
+                <span className="absolute bottom-3 left-3 text-white"><span className="font-serif text-lg block">{o.name}</span><span className="text-xs">{countByOccasion(o.name)} products</span></span>
+              </Link>
+            );
+          })}
         </div>
       </section>
 
