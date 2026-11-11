@@ -20,6 +20,29 @@ const QUALITY_BADGE: Record<string, string> = {
 };
 const qualityBadge = (category: string) => QUALITY_BADGE[category] ?? "🎈 Fully inflated";
 
+// "Why Choose Balloon Zone Dubai?" is written per category for the same
+// reason — flowers are arranged, cakes are baked, party supplies are packed,
+// only balloon/decoration orders are prepared with balloons and delivered
+// fully inflated. No new delivery promises: same-day before 6 PM only.
+const WHY_CHOOSE: Record<string, string> = {
+  "Flowers": "Balloon Zone Dubai is the trusted name for flowers, balloons and decoration across the city. Every flower order is prepared with premium fresh flowers, hand-arranged by our team and delivered fresh and on time — same-day in Dubai for orders placed before 6 PM. Every order is backed by our delivery guarantee, so your celebration looks perfect from the first photo to the last guest.",
+  "Cakes & Sweets": "Balloon Zone Dubai is the trusted name for cakes, balloons and decoration across the city. Every cake is baked fresh to order and delivered on time — same-day in Dubai for orders placed before 6 PM. Every order is backed by our delivery guarantee, so your celebration tastes as good as it looks, from the first slice to the last guest.",
+  "Party Supplies": "Balloon Zone Dubai is the trusted name for party supplies, balloons and decoration across the city. Every order is packed with quality party supplies and delivered on time — same-day in Dubai for orders placed before 6 PM. Every order is backed by our delivery guarantee, so your party is ready from the first guest to the last.",
+};
+const whyChoose = (category: string) =>
+  WHY_CHOOSE[category] ?? "Balloon Zone Dubai is the trusted name in balloons and decoration across the city. Every order is prepared with premium-quality balloons, delivered fully inflated and on time — same-day in Dubai for orders placed before 6 PM. Our professional setup team installs larger displays at your home, hotel or venue, and every order is backed by our delivery guarantee, so your celebration looks perfect from the first photo to the last guest.";
+
+// "Delivery & balloon care" is balloon-specific too: latex/foil float times
+// mean nothing for flowers or cakes, so the section is renamed and rewritten
+// per category. The delivery-information card is the same for all.
+const CARE: Record<string, { heading: string; tipTitle: string; tip: string }> = {
+  "Flowers": { heading: "Delivery & flower care", tipTitle: "Flower care", tip: "Keep flowers cool and out of direct sunlight. Trim the stems and change the water every day to keep them fresh for longer." },
+  "Cakes & Sweets": { heading: "Delivery & cake care", tipTitle: "Cake care", tip: "Keep refrigerated until serving and enjoy within 24–48 hours. Handle with care and keep out of heat and direct sunlight." },
+  "Party Supplies": { heading: "Delivery & party tips", tipTitle: "Party tips", tip: "Check all contents on arrival. Keep supplies away from heat and sharp objects, and store flat-packed items in a cool, dry place." },
+};
+const care = (category: string) =>
+  CARE[category] ?? { heading: "Delivery & balloon care", tipTitle: "Balloon care & float times", tip: "Latex helium balloons typically last 8–12 hours; foil helium balloons can float for 3–5 days or longer, depending on size and conditions." };
+
 export default function ProductPage({ params }: { params: { slug: string } }) {
   const p = PRODUCTS.find((x) => x.slug === params.slug);
   if (!p) notFound();
@@ -75,14 +98,14 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
         </div>
         <div className="mt-8">
           <h3 className="font-serif text-xl text-pine-900">Why Choose Balloon Zone Dubai?</h3>
-          <p className="mt-2 text-stone-700 leading-relaxed">Balloon Zone Dubai is the trusted name in balloons and decoration across the city. Every order is prepared with premium-quality balloons, delivered fully inflated and on time — same-day in Dubai for orders placed before 6 PM. Our professional setup team installs larger displays at your home, hotel or venue, and every order is backed by our delivery guarantee, so your celebration looks perfect from the first photo to the last guest.</p>
+          <p className="mt-2 text-stone-700 leading-relaxed">{whyChoose(p.category)}</p>
         </div>
       </section>
       <section className="mt-12">
-        <h2 className="font-serif text-2xl text-pine-900">Delivery &amp; balloon care</h2>
+        <h2 className="font-serif text-2xl text-pine-900">{care(p.category).heading}</h2>
         <div className="mt-3 grid sm:grid-cols-2 gap-4 text-sm">
           <div className="rounded-2xl border bg-white p-4"><p className="font-semibold">Delivery information</p><p className="text-stone-600 mt-1">Same-day delivery in Dubai for orders before 6 PM. Delivery slots 9 AM–12 PM, 12–3 PM, 3–6 PM and 6–9 PM. Flat Dubai delivery AED 29 in this demo — confirm at launch.</p></div>
-          <div className="rounded-2xl border bg-white p-4"><p className="font-semibold">Balloon care &amp; float times</p><p className="text-stone-600 mt-1">Latex helium balloons typically last 8–12 hours; foil helium balloons can float for 3–5 days or longer, depending on size and conditions.</p></div>
+          <div className="rounded-2xl border bg-white p-4"><p className="font-semibold">{care(p.category).tipTitle}</p><p className="text-stone-600 mt-1">{care(p.category).tip}</p></div>
         </div>
       </section>
       {related.length > 0 && (

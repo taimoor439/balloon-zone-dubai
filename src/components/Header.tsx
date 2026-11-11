@@ -16,6 +16,11 @@ const UTILITY_LINKS = [
   { href: "/blog", label: "Blog" },
 ];
 
+// "View all" label: drop a leading "All " so "All Balloon Types" reads
+// "View all Balloon Types →" instead of "View all All Balloon Types →".
+// The group itself keeps its full name everywhere else.
+const viewAllLabel = (label: string) => label.replace(/^All /, "");
+
 export default function Header() {
   const { count, setOpen } = useCart();
   const router = useRouter();
@@ -193,7 +198,13 @@ export default function Header() {
                   type="button"
                   onMouseEnter={() => setActiveGroup(g.label)}
                   onFocus={() => setActiveGroup(g.label)}
-                  onClick={() => setActiveGroup(activeGroup === g.label ? null : g.label)}
+                  // Open idempotently — do NOT toggle. Hover and focus
+                  // already open the panel before the click fires, so a
+                  // toggling click closed it again on the first click (and
+                  // only the second click, with no fresh hover/focus, opened
+                  // it). Closing stays on mouse-leave, scroll, Escape,
+                  // click-outside and the × button.
+                  onClick={() => setActiveGroup(g.label)}
                   aria-expanded={activeGroup === g.label}
                   className={`shrink-0 whitespace-nowrap px-2 py-2.5 flex items-center gap-1 hover:text-burgundy ${activeGroup === g.label ? "text-burgundy" : ""}`}
                 >
@@ -218,7 +229,7 @@ export default function Header() {
               <p className="font-serif text-lg text-white">{active.emoji} {active.label}</p>
               <div className="flex items-center gap-3">
                 <Link href={active.href} onClick={() => setActiveGroup(null)} className="text-sm font-semibold text-cream hover:underline whitespace-nowrap">
-                  View all {active.label} →
+                  View all {viewAllLabel(active.label)} →
                 </Link>
                 <button onClick={() => setActiveGroup(null)} className="text-2xl leading-none text-cream/80 hover:text-white" aria-label="Close menu">×</button>
               </div>
@@ -287,7 +298,7 @@ export default function Header() {
                         </Link>
                       ))}
                       <Link href={g.href} onClick={() => setMobileOpen(false)} className="block rounded-xl px-3 py-2 text-sm font-semibold text-burgundy hover:bg-white">
-                        View all {g.label} →
+                        View all {viewAllLabel(g.label)} →
                       </Link>
                     </div>
                   )}
