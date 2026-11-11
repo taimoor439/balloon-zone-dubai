@@ -84,7 +84,7 @@ export const PRODUCTS: Product[] = [
     ],
     suitableFor: ["Kids' birthday parties", "Race-car themed parties", "Party table displays", "Birthday photo moments", "Surprise deliveries"],
     includes: ["Race-themed helium balloon bouquet", "Checkered flag foil accents", "Matching latex balloons", "Balloon weights and ribbons", "Fully inflated delivery in Dubai"] },
-  { slug: "little-star-baby-welcome-package", name: "Little Star Baby Welcome Balloon Package", price: 1104, wasPrice: 1200, category: "Balloon Bouquets", occasion: "Newborn", image: img("photo-1555009393-f20bdb245c4d"), blurb: "Welcome-home balloon package for a new baby.", verified: true, badge: "Sale",
+  { slug: "little-star-baby-welcome-package", name: "Little Star Baby Welcome Balloon Package", price: 1104, wasPrice: 1200, category: "Balloon Bouquets", occasion: "Newborn", image: "https://images.pexels.com/photos/32002570/pexels-photo-32002570/free-photo-of-schattige-slapende-pasgeborene-met-pastelkleurige-ballonnen.jpeg?auto=compress&cs=tinysrgb&w=1200", blurb: "Welcome-home balloon package for a new baby.", verified: true, badge: "Sale",
     description: [
       "Welcome the little star home. This gentle balloon package in soft pastels and starry accents turns the first homecoming into a moment the whole family will treasure.",
       "Our team delivers and installs the display at your home in Dubai, ready before mum and baby arrive. Order before 6 PM for same-day delivery.",
@@ -170,7 +170,7 @@ export const OCCASIONS = [
   { name: "Baby Shower", image: "photo-1519689680058-324335c77eba" },
   { name: "Wedding", image: "photo-1519225421980-715cb0215aed" },
   { name: "Proposal", image: "photo-1519741497674-611481863552" },
-  { name: "Newborn", image: "photo-1555009393-f20bdb245c4d" },
+  { name: "Newborn", image: "https://images.pexels.com/photos/32002570/pexels-photo-32002570/free-photo-of-schattige-slapende-pasgeborene-met-pastelkleurige-ballonnen.jpeg?auto=compress&cs=tinysrgb&w=1200" },
   { name: "Graduation", image: "photo-1513151233558-d860c5398176" },
   { name: "New Year", image: "photo-1498931299472-f7a63a5a1cfa" },
   { name: "National Day", image: "photo-1514525253161-7a46d19cd819" },

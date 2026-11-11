@@ -293,7 +293,6 @@ export default function Header() {
           <div className="px-4 pb-2">
             <CallbackButton className="block w-full text-center rounded-full border border-pine-800 text-pine-800 px-3 py-2 text-sm font-semibold" />
           </div>
-          <Link href="/" onClick={() => setMobileOpen(false)} className="block px-4 py-2.5 font-medium text-pine-800 border-t border-pine-100">🏠 Home</Link>
           {MENU_GROUPS.map((g) => (
             <div key={g.label} className="border-t border-pine-100">
               {g.items.length === 0 ? (
@@ -327,8 +326,6 @@ export default function Header() {
               )}
             </div>
           ))}
-          <Link href="/about" onClick={() => setMobileOpen(false)} className="block px-4 py-2.5 font-medium text-pine-800 border-t border-pine-100">About</Link>
-          <Link href="/faq" onClick={() => setMobileOpen(false)} className="block px-4 py-2.5 font-medium text-pine-800 border-t border-pine-100">FAQ</Link>
         </nav>
       )}
     </header>
